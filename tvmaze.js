@@ -3,7 +3,8 @@
 const $showsList = $("#showsList");
 const $episodesArea = $("#episodesArea");
 const $searchForm = $("#searchForm");
-
+const DEFAULT_PHOTO = "https://tinyurl.com/tv-missing";
+const BASE_URL = "http://api.tvmaze.com/"
 
 /** Given a search term, search for tv shows that match that query.
  *
@@ -15,26 +16,35 @@ const $searchForm = $("#searchForm");
 async function getShowsByTerm(term) {
   console.log('getShowsByTerm ran', this);
 
-  let queryString = { params: { q: term } };
-  let response = await axios.get("http://api.tvmaze.com/search/shows", queryString);
+  let searchTerm = { params: { q: term } };
+  let response = await axios.get(`${BASE_URL}search/shows`, searchTerm);
   console.log(response);
 
   // loops over array of show objects and grabs needed data
   let container = [];
   let showData = response.data;
-  for (let currentShow of showData) {
-    let id = currentShow.show.id;
-    let name = currentShow.show.name;
-    let summary = currentShow.show.summary;
-    let image;
-    if (!currentShow.show.image) {
-      image = "https://tinyurl.com/tv-missing";
-    } else {
-      image = currentShow.show.image.original;
-    }
-    container.push({ id, name, summary, image });
-  }
-  return container;
+
+
+  return showData.map(function (val) {
+    let { id, name, summary, image } = val.show;
+    val.show.image ? image = val.show.image.original : image = DEFAULT_PHOTO;
+    return { id, name, summary, image };
+  });
+
+  // for (let currentShow of showData) {
+  //   const { id, name, summary, image } = currentShow.show;
+  //   // let id = currentShow.show.id;
+  //   // let name = currentShow.show.name;
+  //   // let summary = currentShow.show.summary;
+  //   let image;
+  //   if (!currentShow.show.image) {
+  //     image = "https://tinyurl.com/tv-missing";
+  //   } else {
+  //     image = currentShow.show.image.original;
+  //   }
+  //   container.push({ id, name, summary, image });
+  // }
+  // return container;
 
 }
 
@@ -43,17 +53,17 @@ async function getShowsByTerm(term) {
 function populateShows(shows) {
   $showsList.empty();
 
-  for (let show of shows) {
+  for (let { id, image, summary, name } of shows) {
     const $show = $(
-      `<div data-show-id="${show.id}" class="Show col-md-12 col-lg-6 mb-4">
+      `<div data-show-id="${id}" class="Show col-md-12 col-lg-6 mb-4">
          <div class="media">
            <img 
-              src= ${show.image}
-              alt= ${show.name}; 
+              src= ${image}
+              alt= ${name}; 
               class="w-25 mr-3">
            <div class="media-body">
-             <h5 class="text-primary">${show.name}</h5>
-             <div><small>${show.summary}</small></div>
+             <h5 class="text-primary">${name}</h5>
+             <div><small>${summary}</small></div>
              <button class="btn btn-outline-light btn-sm Show-getEpisodes">
                Episodes
              </button>
