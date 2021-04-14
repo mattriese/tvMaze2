@@ -73,7 +73,7 @@ function populateShows(shows) {
       `<div data-show-id="${show.id}" class="Show col-md-12 col-lg-6 mb-4">
          <div class="media">
            <img 
-              src= ${show.image}; 
+              src= ${show.image}
               alt= ${show.name}; 
               class="w-25 mr-3">
            <div class="media-body">
