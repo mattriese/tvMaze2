@@ -57,9 +57,9 @@ function populateShows(shows) {
     const $show = $(
       `<div data-show-id="${id}" class="Show col-md-12 col-lg-6 mb-4">
          <div class="media">
-           <img 
+           <img
               src= ${image}
-              alt= ${name}; 
+              alt= ${name};
               class="w-25 mr-3">
            <div class="media-body">
              <h5 class="text-primary">${name}</h5>
@@ -68,7 +68,7 @@ function populateShows(shows) {
                Episodes
              </button>
            </div>
-         </div>  
+         </div>
        </div>
       `);
 
@@ -98,8 +98,37 @@ $searchForm.on("submit", async function (evt) {
  *      { id, name, season, number }
  */
 
-// async function getEpisodesOfShow(id) { }
+async function getEpisodesOfShow(id) {
+  console.log("getEpisodesOfShow Ran", this);
+  let response = await axios.get(`${BASE_URL}shows/${id}/episodes`);
+  console.log("response = ",response);
 
+  let episodeData = response.data;
+
+  return episodeData.map(function (val) {
+    let { id, name, season, number } = val;
+    return { id, name, season, number };
+
+  });
+}
 /** Write a clear docstring for this function... */
 
-// function populateEpisodes(episodes) { }
+function populateEpisodes(episodes) {
+  $("#episodesArea").css("display", "block");
+  for(let episode of episodes){
+    let $li = $("<li>").text(`${episode.name} (season ${episode.season}, episode ${episode.number})`);
+    $("#episodesList").append($li);
+  };
+}
+
+$("#showsList").on("click", ".Show-getEpisodes", async function(evt){
+  console.log("event handler episodes button ran", this);
+  evt.preventDefault();
+  let id = $(evt.target).closest(".Show").data("show-id");
+  console.log("id =", id);
+  let episodesArray = await getEpisodesOfShow(id);
+  populateEpisodes(episodesArray);
+})
+
+
+//var customerId = $(this).closest("div[data-id]").attr('data-data-id');
