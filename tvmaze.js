@@ -31,21 +31,6 @@ async function getShowsByTerm(term) {
     return { id, name, summary, image };
   });
 
-  // for (let currentShow of showData) {
-  //   const { id, name, summary, image } = currentShow.show;
-  //   // let id = currentShow.show.id;
-  //   // let name = currentShow.show.name;
-  //   // let summary = currentShow.show.summary;
-  //   let image;
-  //   if (!currentShow.show.image) {
-  //     image = "https://tinyurl.com/tv-missing";
-  //   } else {
-  //     image = currentShow.show.image.original;
-  //   }
-  //   container.push({ id, name, summary, image });
-  // }
-  // return container;
-
 }
 
 
@@ -132,3 +117,21 @@ $("#showsList").on("click", ".Show-getEpisodes", async function(evt){
 
 
 //var customerId = $(this).closest("div[data-id]").attr('data-data-id');
+
+
+
+/////////Old version of GetEpisodesOfShow loop
+  // for (let currentShow of showData) {
+  //   const { id, name, summary, image } = currentShow.show;
+  //   // let id = currentShow.show.id;
+  //   // let name = currentShow.show.name;
+  //   // let summary = currentShow.show.summary;
+  //   let image;
+  //   if (!currentShow.show.image) {
+  //     image = "https://tinyurl.com/tv-missing";
+  //   } else {
+  //     image = currentShow.show.image.original;
+  //   }
+  //   container.push({ id, name, summary, image });
+  // }
+  // return container
